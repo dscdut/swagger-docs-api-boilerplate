@@ -16,3 +16,52 @@ tags:
     description: Operations about authentication
   - name: users
     description: Operations about user
+paths:
+  /auth/login:
+    post:
+      tags:
+        - authentication
+      summary: auth_login_create
+      operationId: login
+      requestBody:
+        description: Objects need to be added to log in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Auth"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Auth"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+
+components:
+  securitySchemes:
+    users_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://users.swagger.io/oauth/dialog
+          scopes:
+            write:users: modify users in your account
+            read:users: read your user
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+  schemas:
+    Auth:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      xml:
+        name: Auth
