@@ -40,6 +40,29 @@ paths:
           description: Invalid input
         "422":
           description: Validation exception
+  /auth/register:
+    post:
+      tags:
+        - authentication
+      summary: auth_register_create
+      operationId: register
+      requestBody:
+        description: Objects need to be added to register
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
 
 components:
   securitySchemes:
@@ -65,3 +88,16 @@ components:
           type: string
       xml:
         name: Auth
+    User:
+      type: object
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+      xml:
+        name: User
