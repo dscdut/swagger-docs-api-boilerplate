@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  title: Unihack 2024 Template API Documentation
+  title: Template Swagger API Documentation
   description: |-
-    API documentation for the Unihack 2024 template projects, created by GDSC-DUT. This documentation offers detailed insights into the common API endpoints used across all templates.
+    API documentation for the template projects, created by GDSC-DUT. This documentation offers detailed insights into the common API endpoints used across all templates.
   contact:
     email: contact@gdsc.dev
   version: 1.0.0
