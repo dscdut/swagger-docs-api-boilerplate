@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info:
+  title: Template Swagger API Documentation
+  description: |-
+    API documentation for the template projects, created by GDSC-DUT. This documentation offers detailed insights into the common API endpoints used across all templates.
+  contact:
+    email: contact@gdsc.dev
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: authentication
+    description: Operations about authentication
+  - name: users
+    description: Operations about user
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - authentication
+      operationId: login
+      requestBody:
+        description: default email and password, seeded in the database
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@gmail.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        "200":
+          description: The user is authenticated, and an access token is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        "400":
+          description: "Return this response if one of the following error occurs: 101"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: integer
+                    example: 101
+                  message:
+                    type: string
+                    example: "The email and password field is required"
+
+        "401":
+          description: "Return this response if one of the following error occurs: 102"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: integer
+                    example: 102
+                  message:
+                    type: string
+                    example: "Incorrect email or password."
+        "500":
+          description: "Return this response if one of the following error occurs: 103"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: integer
+                    example: 103
+                  message:
+                    type: string
+                    example: "An unexpected error occurred on the server"

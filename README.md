@@ -1,9 +1,9 @@
-# Unihack 2024 Template API Documentation
+# Swagger API Documentation
 
-API documentation for the Unihack 2024 template projects, created by GDSC-DUT. This documentation offers detailed insights into the common API endpoints used across all templates.
+API documentation for the template projects, created by GDSC-DUT. This documentation offers detailed insights into the common API endpoints used across all templates.
 
 ## How to run locally
-#### 1. Using Docker
+### 1. Using Docker
 First, you need to determine the current location of your project. You can do this by running the following command in your terminal:
 ```
 pwd
@@ -35,5 +35,46 @@ For example, if this project is located at /Users/username/projects/swagger-docs
 docker run -p 8085:8080 -e SWAGGER_JSON=/foo/openapi.yaml -v /Users/username/projects/swagger-docs-api-boilerplate:/foo swaggerapi/swagger-ui
 ```
 
-#### 2. Using Jetbrains IDEs
+### 2. Using Jetbrains IDEs
 Just open this project in any Jetbrains IDEs, and they will handle the rest.
+
+### 3. Using Python
+#### Prerequisites
+- [Python](https://www.python.org/) v3.10+
+
+#### Setup virtual environment
+```bash
+# Create virtual env
+python -m venv venv
+
+# Activate the venv
+# On window
+.\venv\Scripts\activate
+
+# On MacOs
+source ./venv/bin/activatee
+
+# Deactivate the venv
+deactivate
+```
+#### Setup dependencies & environment
+
+1. Change directory to `python` folder
+```bash
+cd python
+```
+
+2. Inside the `python` folder apply these following command to install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+#### Run up the documentation
+```bash
+python swagger-ui.py
+```
+
+Open browser and access `localhost:8989/api/docs` to view swagger documentation
+
+## How to update swagger documentation
+Modify the `docs/openapi.yaml` file to update your api documentation
