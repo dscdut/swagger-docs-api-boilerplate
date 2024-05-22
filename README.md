@@ -74,7 +74,7 @@ pip install -r requirements.txt
 python swagger-ui.py
 ```
 
-Open browser and access `localhost:8989/api/docs` to view swagger documentation
+Open browser and access `localhost:8989/api/doc` to view swagger documentation
 
 ## How to update swagger documentation
 Modify the `docs/openapi.yaml` file to update your api documentation
