@@ -20,4 +20,3 @@ if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port=8989)
     print("API documentation is available at http://localhost:8989/api/docs")
-p
