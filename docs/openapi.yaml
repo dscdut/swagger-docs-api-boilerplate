@@ -16,7 +16,6 @@ tags:
     description: Operations about authentication
   - name: users
     description: Operations about user
-
 paths:
   /auth/login:
     post:
@@ -37,6 +36,9 @@ paths:
                 password:
                   type: string
                   example: password123
+              required:
+                - email
+                - password
       responses:
         "200":
           description: The user is authenticated, and an access token is returned.
@@ -48,43 +50,121 @@ paths:
                   access_token:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                required:
+                  - access_token
         "400":
           description: "Return this response if one of the following error occurs: 101"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error_code:
-                    type: integer
-                    example: 101
-                  message:
-                    type: string
-                    example: "The email and password field is required"
-
+                $ref: "#/components/schemas/error_response"
         "401":
           description: "Return this response if one of the following error occurs: 102"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error_code:
-                    type: integer
-                    example: 102
-                  message:
-                    type: string
-                    example: "Incorrect email or password."
+                $ref: "#/components/schemas/error_response"
         "500":
           description: "Return this response if one of the following error occurs: 103"
           content:
             application/json:
               schema:
+                $ref: "#/components/schemas/error_response"
+  /auth/register:
+    post:
+      tags:
+        - authentication
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                  example: Pham Tien
+                  description: |-
+                    ^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$
+                    (Starts with one or more letters,
+                    allows for characters like spaces,
+                    hyphens, apostrophes, commas,
+                    and periods within the name,
+                    and does not allow trailing spaces)
+                email:
+                  type: string
+                  example: user@gmail.com
+                  description: |-
+                    ^.*@.*\.(com|net|org)$
+                    (The email address must contain at least one character before and after the '@' symbol,
+                    and end with an extension like .com, .net, .org.)
+                password:
+                  type: string
+                  example: Password123
+                  description: |-
+                    ^.*(?=.{7,50})(?=.*\d)(?=.*[A-Z]).*$
+                    (The length of the string must be between 7 and 50 characters.
+                    It must contain at least one digit.
+                    It must contain at least one uppercase letter)
+                confirm_password:
+                  type: string
+                  example: Password123
+              required:
+                - full_name
+                - email
+                - password
+                - confirm_password
+      responses:
+        "201":
+          description: User registered successfully. Email and full_name are returned.
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  error_code:
+                  id:
                     type: integer
-                    example: 103
-                  message:
+                    example: 1
+                  email:
                     type: string
-                    example: "An unexpected error occurred on the server"
+                    example: user@gmail.com
+                  full_name:
+                    type: string
+                    example: Pham Tien
+                required:
+                  - id
+                  - email
+                  - full_name
+        "400":
+          description: "Return this response if one of the following error occurs: 104"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error_response"
+        "409":
+          description: "Return this response if one of the following error occurs: 108"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error_response"
+        "500":
+          description: "Return this response if one of the following error occurs: 103"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error_response"
+components:
+  schemas:
+    error_response:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          example: 108
+        message:
+          type: string
+          example: Email already exists
+      required:
+        - error_code
+        - message
