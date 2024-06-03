@@ -56,20 +56,23 @@ paths:
           description: "Return this response if one of the following error occurs: 101"
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/error_response"
+              examples:
+                error_101_example:
+                  $ref: "#/components/examples/error_101_example"
         "401":
           description: "Return this response if one of the following error occurs: 102"
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/error_response"
+              examples:
+                error_102_example:
+                  $ref: "#/components/examples/error_102_example"
         "500":
           description: "Return this response if one of the following error occurs: 103"
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/error_response"
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
   /auth/register:
     post:
       tags:
@@ -121,50 +124,122 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  email:
-                    type: string
-                    example: user@gmail.com
-                  full_name:
-                    type: string
-                    example: Pham Tien
-                required:
-                  - id
-                  - email
-                  - full_name
+                $ref: "#/components/schemas/user_info"
         "400":
           description: "Return this response if one of the following error occurs: 104"
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/error_response"
+              examples:
+                error_104_example:
+                  $ref: "#/components/examples/error_104_example"
         "409":
           description: "Return this response if one of the following error occurs: 108"
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/error_response"
+              examples:
+                error_108_example:
+                  $ref: "#/components/examples/error_108_example"
         "500":
           description: "Return this response if one of the following error occurs: 103"
           content:
             application/json:
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
+  /users:
+    get:
+      tags:
+        - users
+      operationId: get_users
+      parameters:
+        - $ref: "#/components/parameters/page_size_param"
+        - $ref: "#/components/parameters/page_param"
+      responses:
+        "200":
+          description: A paginated list of users
+          content:
+            application/json:
               schema:
-                $ref: "#/components/schemas/error_response"
+                allOf:
+                  - $ref: "#/components/schemas/paginated_total"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/user_info"
+        "400":
+          description: "Return this response if one of the following error occurs: 104"
+          content:
+            application/json:
+              examples:
+                error_104_example:
+                  $ref: "#/components/examples/error_104_example"
+        "500":
+          description: "Return this response if one of the following error occurs: 103"
+          content:
+            application/json:
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
 components:
   schemas:
-    error_response:
+    user_info:
       type: object
       properties:
-        error_code:
+        id:
           type: integer
-          example: 108
-        message:
+          example: 123
+        full_name:
           type: string
-          example: Email already exists
+          example: Pham Tien
+        email:
+          type: string
+          example: user@gmail.com
       required:
-        - error_code
-        - message
+        - id
+        - full_name
+        - email
+    paginated_total:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 10
+  parameters:
+    page_param:
+      name: page
+      in: query
+      description: Page to be displayed
+      schema:
+        type: integer
+        default: 1
+        example: 4
+    page_size_param:
+      name: page_size
+      in: query
+      description: Number of results per page
+      schema:
+        type: integer
+        default: 10
+        example: 1
+  examples:
+    error_101_example:
+      value:
+        error_code: 101
+        message: The email and password field is required
+    error_102_example:
+      value:
+        error_code: 102
+        message: Incorrect email or password
+    error_103_example:
+      value:
+        error_code: 103
+        message: An unexpected error occurred on the server
+    error_104_example:
+      value:
+        error_code: 104
+        message: Invalid syntax
+    error_108_example:
+      value:
+        error_code: 108
+        message: Email already exists
