@@ -181,6 +181,50 @@ paths:
               examples:
                 error_103_example:
                   $ref: "#/components/examples/error_103_example"
+  /users/{id}/:
+    delete:
+      tags:
+        - users
+      operationId: delete_user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the user to delete information.
+          schema:
+            type: integer
+            example: 123
+      responses:
+        "204":
+          description: User information deleted successfully
+        "400":
+          description: "Return this response if one of the following error occurs: 104"
+          content:
+            application/json:
+              examples:
+                error_104_example:
+                  $ref: "#/components/examples/error_104_example"
+        "403":
+          description: "Return this response if one of the following error occurs: 113"
+          content:
+            application/json:
+              examples:
+                error_113_example:
+                  $ref: "#/components/examples/error_113_example"
+        "404":
+          description: "Return this response if one of the following error occurs: 112"
+          content:
+            application/json:
+              examples:
+                error_112_example:
+                  $ref: "#/components/examples/error_112_example"
+        "500":
+          description: "Return this response if one of the following error occurs: 103"
+          content:
+            application/json:
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
 components:
   schemas:
     user_info:
@@ -243,3 +287,11 @@ components:
       value:
         error_code: 108
         message: Email already exists
+    error_112_example:
+      value:
+        error_code: 112
+        message: The user ID does not exist.
+    error_113_example:
+      value:
+        error_code: 113
+        message: The user is not authorized to delete information
