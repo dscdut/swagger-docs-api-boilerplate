@@ -255,6 +255,103 @@ paths:
               examples:
                 error_103_example:
                   $ref: "#/components/examples/error_103_example"
+    put:
+      tags:
+        - users
+      operationId: update_user
+      description: The admin can edit user information and Users can edit their own information
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the user to update information
+          schema:
+            type: integer
+            example: 123
+        - in: body
+          name: data
+          required: true
+          description: User information data to be updated
+          schema:
+            type: object
+            properties:
+              full_name:
+                type: string
+                example: Pham Tien
+                description: |-
+                  ^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$
+                  (Starts with one or more letters,
+                  allows for characters like spaces,
+                  hyphens, apostrophes, commas,
+                  and periods within the name,
+                  and does not allow trailing spaces)
+              email:
+                type: string
+                example: user@gmail.com
+                description: |-
+                  ^.*@.*\.(com|net|org)$
+                  (The email address must contain at least one character before and after the '@' symbol,
+                  and end with an extension like .com, .net, .org.)
+              role:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 2
+      responses:
+        "200":
+          description: User information updated successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/user_info"
+                properties:
+                  role:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 2
+        "400":
+          description: "Return this response if one of the following error occurs: 104, 115"
+          content:
+            application/json:
+              examples:
+                error_104_example:
+                  value:
+                    error_code: 104
+                    message: Invalid syntax
+                    details:
+                      [
+                        "Missing required fields",
+                        "Invalid email field format",
+                        "Invalid full_name field format",
+                        "The provided user ID is in an invalid format. The ID must be a number greater than 0",
+                      ]
+                error_115_example:
+                  $ref: "#/components/examples/error_115_example"
+        "403":
+          description: "Return this response if one of the following error occurs: 114 (The user does not have permission to edit the information of the admin or other users)."
+          content:
+            application/json:
+              examples:
+                error_114_example:
+                  $ref: "#/components/examples/error_114_example"
+        "404":
+          description: "Return this response if one of the following error occurs: 112"
+          content:
+            application/json:
+              examples:
+                error_112_example:
+                  $ref: "#/components/examples/error_112_example"
+        "500":
+          description: "Return this response if one of the following error occurs: 103"
+          content:
+            application/json:
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
 components:
   schemas:
     user_info:
@@ -312,8 +409,16 @@ components:
     error_112_example:
       value:
         error_code: 112
-        message: The user ID does not exist.
+        message: The user ID does not exist
     error_113_example:
       value:
         error_code: 113
         message: The user is not authorized to delete information
+    error_114_example:
+      value:
+        error_code: 114
+        message: The user is not authorized to edit information
+    error_115_example:
+      value:
+        error_code: 115
+        message: Role with the provided ID does not exist
