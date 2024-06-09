@@ -16,6 +16,8 @@ tags:
     description: Operations about authentication
   - name: users
     description: Operations about user
+  - name: admin
+    description: Operations about admin
 paths:
   /auth/login:
     post:
@@ -141,12 +143,14 @@ paths:
                   value:
                     error_code: 104
                     message: Invalid syntax
-                    details:
-                      [
-                        "Missing required fields",
-                        "Invalid email field format",
-                        "Invalid full_name field format",
-                        "Invalid password field format",
+                    details: [
+                        "Missing required email field",
+                        "Missing required full_name field",
+                        "Invalid email field format: Starts with one or more letters,  allows for characters like spaces,hyphens, apostrophes, commas, and periods within the name, and does not allow trailing spaces ",
+                        "Invalid full_name field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
+                        "Invalid password field format: The length of the string must be between 7 and 50 characters.
+                        It must contain at least one digit.
+                        It must contain at least one uppercase letter ",
                         "Password and confirm password do not match",
                       ]
         "409":
@@ -184,6 +188,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/user_info"
+                required:
+                  - data
         "400":
           description: "Return this response if one of the following error occurs: 104"
           content:
@@ -205,10 +211,80 @@ paths:
               examples:
                 error_103_example:
                   $ref: "#/components/examples/error_103_example"
-  /users/{id}/:
-    delete:
+    put:
       tags:
         - users
+      operationId: update_user
+      description: Users can edit their own information
+      parameters:
+        - in: body
+          name: data
+          required: true
+          description: User information data to be updated
+          schema:
+            type: object
+            properties:
+              full_name:
+                type: string
+                example: Pham Tien
+                description: |-
+                  ^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$
+                  (Starts with one or more letters,
+                  allows for characters like spaces,
+                  hyphens, apostrophes, commas,
+                  and periods within the name,
+                  and does not allow trailing spaces)
+              email:
+                type: string
+                example: user@gmail.com
+                description: |-
+                  ^.*@.*\.(com|net|org)$
+                  (The email address must contain at least one character before and after the '@' symbol,
+                  and end with an extension like .com, .net, .org.)
+            required:
+              - full_name
+              - email
+      responses:
+        "200":
+          description: User information updated successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/user_info"
+                properties:
+                  role_id:
+                    type: integer
+                    example: 1
+                required:
+                  - role_id
+        "400":
+          description: "Return this response if one of the following error occurs: 104"
+          content:
+            application/json:
+              examples:
+                error_104_example:
+                  value:
+                    error_code: 104
+                    message: Invalid syntax
+                    details:
+                      [
+                        "Missing required email field",
+                        "Missing required full_name field",
+                        "Invalid email field format: Starts with one or more letters,  allows for characters like spaces,hyphens, apostrophes, commas, and periods within the name, and does not allow trailing spaces ",
+                        "Invalid full_name field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
+                      ]
+        "500":
+          description: "Return this response if one of the following error occurs: 103"
+          content:
+            application/json:
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
+  admin/users/{id}:
+    delete:
+      tags:
+        - admin
       operationId: delete_user
       parameters:
         - in: path
@@ -257,9 +333,9 @@ paths:
                   $ref: "#/components/examples/error_103_example"
     put:
       tags:
-        - users
+        - admin
       operationId: update_user
-      description: The admin can edit user information and Users can edit their own information
+      description: The admin can edit user information
       parameters:
         - in: path
           name: id
@@ -292,12 +368,13 @@ paths:
                   ^.*@.*\.(com|net|org)$
                   (The email address must contain at least one character before and after the '@' symbol,
                   and end with an extension like .com, .net, .org.)
-              role:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 2
+              role_id:
+                type: integer
+                example: 2
+            required:
+              - full_name
+              - email
+              - role_id
       responses:
         "200":
           description: User information updated successfully.
@@ -307,12 +384,11 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/user_info"
                 properties:
-                  role:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 2
+                  role_id:
+                    type: integer
+                    example: 2
+                required:
+                  - role_id
         "400":
           description: "Return this response if one of the following error occurs: 104, 115"
           content:
@@ -324,15 +400,17 @@ paths:
                     message: Invalid syntax
                     details:
                       [
-                        "Missing required fields",
-                        "Invalid email field format",
-                        "Invalid full_name field format",
+                        "Missing required email field",
+                        "Missing required full_name field",
+                        "Missing required role_id field",
+                        "Invalid email field format: Starts with one or more letters,  allows for characters like spaces,hyphens, apostrophes, commas, and periods within the name, and does not allow trailing spaces",
+                        "Invalid full_name field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
                         "The provided user ID is in an invalid format. The ID must be a number greater than 0",
                       ]
                 error_115_example:
                   $ref: "#/components/examples/error_115_example"
         "403":
-          description: "Return this response if one of the following error occurs: 114 (The user does not have permission to edit the information of the admin or other users)."
+          description: "Return this response if one of the following error occurs: 114"
           content:
             application/json:
               examples:
@@ -376,6 +454,8 @@ components:
         total:
           type: integer
           example: 10
+      required:
+        - total
   parameters:
     page_param:
       name: page
@@ -385,6 +465,7 @@ components:
         type: integer
         default: 1
         example: 4
+        required: page_param
     page_size_param:
       name: page_size
       in: query
@@ -393,6 +474,7 @@ components:
         type: integer
         default: 10
         example: 1
+        required: page_size_param
   examples:
     error_102_example:
       value:
@@ -417,7 +499,7 @@ components:
     error_114_example:
       value:
         error_code: 114
-        message: The user is not authorized to edit information
+        message: The admin is not authorized to edit information of other admins
     error_115_example:
       value:
         error_code: 115
