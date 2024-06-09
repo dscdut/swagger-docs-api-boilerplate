@@ -133,7 +133,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/user_info"
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  full_name:
+                    type: string
+                    example: Pham Tien
+                  email:
+                    type: string
+                    example: user@gmail.com
+                required:
+                  - id
+                  - full_name
+                  - email
         "400":
           description: "Return this response if one of the following error occurs: 104"
           content:
@@ -146,8 +159,8 @@ paths:
                     details: [
                         "Missing required email field",
                         "Missing required full_name field",
-                        "Invalid email field format: Starts with one or more letters,  allows for characters like spaces,hyphens, apostrophes, commas, and periods within the name, and does not allow trailing spaces ",
-                        "Invalid full_name field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
+                        "Invalid full_name field format: Starts with one or more letters, allows for characters like spaces, hyphens, apostrophes, commas, periods within the name, does not allow trailing spaces",
+                        "Invalid email field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
                         "Invalid password field format: The length of the string must be between 7 and 50 characters.
                         It must contain at least one digit.
                         It must contain at least one uppercase letter ",
@@ -252,12 +265,6 @@ paths:
               schema:
                 allOf:
                   - $ref: "#/components/schemas/user_info"
-                properties:
-                  role_id:
-                    type: integer
-                    example: 1
-                required:
-                  - role_id
         "400":
           description: "Return this response if one of the following error occurs: 104"
           content:
@@ -271,8 +278,8 @@ paths:
                       [
                         "Missing required email field",
                         "Missing required full_name field",
-                        "Invalid email field format: Starts with one or more letters,  allows for characters like spaces,hyphens, apostrophes, commas, and periods within the name, and does not allow trailing spaces ",
-                        "Invalid full_name field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
+                        "Invalid full_name field format: Starts with one or more letters, allows for characters like spaces, hyphens, apostrophes, commas, periods within the name, does not allow trailing spaces",
+                        "Invalid email field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
                       ]
         "500":
           description: "Return this response if one of the following error occurs: 103"
@@ -383,12 +390,6 @@ paths:
               schema:
                 allOf:
                   - $ref: "#/components/schemas/user_info"
-                properties:
-                  role_id:
-                    type: integer
-                    example: 2
-                required:
-                  - role_id
         "400":
           description: "Return this response if one of the following error occurs: 104, 115"
           content:
@@ -403,8 +404,8 @@ paths:
                         "Missing required email field",
                         "Missing required full_name field",
                         "Missing required role_id field",
-                        "Invalid email field format: Starts with one or more letters,  allows for characters like spaces,hyphens, apostrophes, commas, and periods within the name, and does not allow trailing spaces",
-                        "Invalid full_name field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
+                        "Invalid full_name field format: Starts with one or more letters, allows for characters like spaces, hyphens, apostrophes, commas, periods within the name, does not allow trailing spaces",
+                        "Invalid email field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
                         "The provided user ID is in an invalid format. The ID must be a number greater than 0",
                       ]
                 error_115_example:
@@ -444,10 +445,23 @@ components:
         email:
           type: string
           example: user@gmail.com
+        role:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: member
+          required:
+            - id
+            - name
       required:
         - id
         - full_name
         - email
+        - role
     paginated_total:
       type: object
       properties:
