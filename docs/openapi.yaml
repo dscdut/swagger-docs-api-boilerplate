@@ -222,6 +222,16 @@ paths:
               examples:
                 error_116_example:
                   $ref: "#/components/examples/error_116_example"
+        "404":
+          description: "Return this response if one of the following error occurs: 115"
+          content:
+            application/json:
+              examples:
+                error_115_example:
+                  value:
+                    error_code: 115
+                    message: The resource does not exist
+                    details: [Path does not exist]
         "500":
           description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
@@ -293,6 +303,13 @@ paths:
               examples:
                 error_116_example:
                   $ref: "#/components/examples/error_116_example"
+        "409":
+          description: "Return this response if one of the following error occurs: 108"
+          content:
+            application/json:
+              examples:
+                error_108_example:
+                  $ref: "#/components/examples/error_108_example"
         "500":
           description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
@@ -344,12 +361,15 @@ paths:
                 error_113_example:
                   $ref: "#/components/examples/error_113_example"
         "404":
-          description: "Return this response if one of the following error occurs: 112"
+          description: "Return this response if one of the following error occurs: 115"
           content:
             application/json:
               examples:
-                error_112_example:
-                  $ref: "#/components/examples/error_112_example"
+                error_115_example:
+                  value:
+                    error_code: 115
+                    message: The resource does not exist
+                    details: [The user Id does not exits]
         "500":
           description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
@@ -410,7 +430,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/user_info"
         "400":
-          description: "Return this response if one of the following error occurs: 104, 115"
+          description: "Return this response if one of the following error occurs: 104"
           content:
             application/json:
               examples:
@@ -426,9 +446,8 @@ paths:
                         "Invalid full_name field format: Starts with one or more letters, allows for characters like spaces, hyphens, apostrophes, commas, periods within the name, does not allow trailing spaces",
                         "Invalid email field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
                         "The provided user ID is in an invalid format. The ID must be a number greater than 0",
+                        "Role with the provided ID does not exist",
                       ]
-                error_115_example:
-                  $ref: "#/components/examples/error_115_example"
         "401":
           description: "Return this response if one of the following error occurs: 116"
           content:
@@ -444,12 +463,19 @@ paths:
                 error_114_example:
                   $ref: "#/components/examples/error_114_example"
         "404":
-          description: "Return this response if one of the following error occurs: 112"
+          description: "Return this response if one of the following error occurs: 115"
           content:
             application/json:
               examples:
-                error_112_example:
-                  $ref: "#/components/examples/error_112_example"
+                error_115_example:
+                  $ref: "#/components/examples/error_115_example"
+        "409":
+          description: "Return this response if one of the following error occurs: 108"
+          content:
+            application/json:
+              examples:
+                error_108_example:
+                  $ref: "#/components/examples/error_108_example"
         "500":
           description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
@@ -479,7 +505,7 @@ components:
               example: 1
             name:
               type: string
-              example: member
+              example: MEMBER
           required:
             - id
             - name
@@ -529,14 +555,10 @@ components:
       value:
         error_code: 108
         message: Email already exists
-    error_112_example:
-      value:
-        error_code: 112
-        message: The user ID does not exist
     error_113_example:
       value:
         error_code: 113
-        message: The user is not authorized to delete information
+        message: The admin is not authorized to delete information of other admins
     error_114_example:
       value:
         error_code: 114
@@ -544,7 +566,8 @@ components:
     error_115_example:
       value:
         error_code: 115
-        message: Role with the provided ID does not exist
+        message: The resource does not exist
+        details: [Path does not exist, The user Id does not exits]
     error_116_example:
       value:
         error_code: 116
