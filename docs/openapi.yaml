@@ -37,7 +37,7 @@ paths:
                   example: user@gmail.com
                 password:
                   type: string
-                  example: password123
+                  example: Password123
               required:
                 - email
                 - password
@@ -115,10 +115,8 @@ paths:
                   type: string
                   example: Password123
                   description: |-
-                    ^.*(?=.{7,50})(?=.*\d)(?=.*[A-Z]).*$
-                    (The length of the string must be between 7 and 50 characters.
-                    It must contain at least one digit.
-                    It must contain at least one uppercase letter)
+                    ^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$
+                     (Minimum eight characters, at least one letter(uppercase or lowercase) and one number)
                 confirm_password:
                   type: string
                   example: Password123
