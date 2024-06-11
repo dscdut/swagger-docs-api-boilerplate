@@ -217,6 +217,13 @@ paths:
                         The invalid parameter is passed to the page. The 'page' parameter must be a number greater than 0,
                         The invalid parameter is passed to the page_size. The 'page_size' parameter must be a number greater than 0,
                       ]
+        "401":
+          description: "Return this response if one of the following error occurs: 116"
+          content:
+            application/json:
+              examples:
+                error_116_example:
+                  $ref: "#/components/examples/error_116_example"
         "500":
           description: "Return this response if one of the following error occurs: 103"
           content:
@@ -281,6 +288,13 @@ paths:
                         "Invalid full_name field format: Starts with one or more letters, allows for characters like spaces, hyphens, apostrophes, commas, periods within the name, does not allow trailing spaces",
                         "Invalid email field format: The email address must contain at least one character before and after the '@' symbol and end with an extension like .com, .net, .org.",
                       ]
+        "401":
+          description: "Return this response if one of the following error occurs: 116"
+          content:
+            application/json:
+              examples:
+                error_116_example:
+                  $ref: "#/components/examples/error_116_example"
         "500":
           description: "Return this response if one of the following error occurs: 103"
           content:
@@ -317,6 +331,13 @@ paths:
                       [
                         The provided user ID is in an invalid format. The ID must be a number greater than 0,
                       ]
+        "401":
+          description: "Return this response if one of the following error occurs: 116"
+          content:
+            application/json:
+              examples:
+                error_116_example:
+                  $ref: "#/components/examples/error_116_example"
         "403":
           description: "Return this response if one of the following error occurs: 113"
           content:
@@ -410,6 +431,13 @@ paths:
                       ]
                 error_115_example:
                   $ref: "#/components/examples/error_115_example"
+        "401":
+          description: "Return this response if one of the following error occurs: 116"
+          content:
+            application/json:
+              examples:
+                error_116_example:
+                  $ref: "#/components/examples/error_116_example"
         "403":
           description: "Return this response if one of the following error occurs: 114"
           content:
@@ -518,3 +546,7 @@ components:
       value:
         error_code: 115
         message: Role with the provided ID does not exist
+    error_116_example:
+      value:
+        error_code: 116
+        message: Users must log in to access this resource
