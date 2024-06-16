@@ -76,7 +76,7 @@ paths:
                 error_102_example:
                   $ref: "#/components/examples/error_102_example"
         "500":
-          description: "Return this response if one of the following error occurs: 103"
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
             application/json:
               examples:
@@ -174,7 +174,7 @@ paths:
                 error_108_example:
                   $ref: "#/components/examples/error_108_example"
         "500":
-          description: "Return this response if one of the following error occurs: 103"
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
             application/json:
               examples:
@@ -225,7 +225,7 @@ paths:
                 error_116_example:
                   $ref: "#/components/examples/error_116_example"
         "500":
-          description: "Return this response if one of the following error occurs: 103"
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
             application/json:
               examples:
@@ -296,7 +296,7 @@ paths:
                 error_116_example:
                   $ref: "#/components/examples/error_116_example"
         "500":
-          description: "Return this response if one of the following error occurs: 103"
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
             application/json:
               examples:
@@ -353,7 +353,7 @@ paths:
                 error_112_example:
                   $ref: "#/components/examples/error_112_example"
         "500":
-          description: "Return this response if one of the following error occurs: 103"
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
             application/json:
               examples:
@@ -453,7 +453,7 @@ paths:
                 error_112_example:
                   $ref: "#/components/examples/error_112_example"
         "500":
-          description: "Return this response if one of the following error occurs: 103"
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
           content:
             application/json:
               examples:
@@ -525,7 +525,8 @@ components:
     error_103_example:
       value:
         error_code: 103
-        message: An unexpected error occurred on the server
+        message: The database connection has an issue
+        details: at IdentityManagement.Core.Domain.UserAggregate.DomainServices.Implementations.AuthService.Login(String email, String password) in /Users/phuc1403/projects/superbad-store_backend/Services/Identity/Core/IdentityManagement.Core.Domain/UserAggregate/DomainServices/Implementations/AuthService.cs:line 29\n   at IdentityManagement.Core.Application.Users.CQRS.Commands.Handlers.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in /Users/phuc1403/projects/superbad-store_backend/Services/Identity/Core/IdentityManagement.Core.Application/Users/CQRS/Commands/Handlers/LoginCommandHandler.cs:line 31\n
     error_108_example:
       value:
         error_code: 108
