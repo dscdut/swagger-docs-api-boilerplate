@@ -18,6 +18,8 @@ tags:
     description: Operations about user
   - name: admin
     description: Operations about admin
+  - name: payment
+    description: Operations about payment
 paths:
   /auth/login:
     post:
@@ -483,6 +485,213 @@ paths:
               examples:
                 error_103_example:
                   $ref: "#/components/examples/error_103_example"
+
+  /payment/orders:
+    post:
+      tags:
+        - payment
+      operationId: create_payment_url
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_name:
+                  type: String
+                  example: Pham Van Tien
+                customer_phone:
+                  type: string
+                  example: "0355522219"
+                amount:
+                  type: integer
+                  example: 100000
+                  description: The amount to be paid
+                currency:
+                  type: string
+                  example: "VND"
+                  description: Currency type (VND, USD)
+                return_url:
+                  type: string
+                  example: "https://yourapp.com/payment-return"
+                  description: Redirect URL upon successful payment
+                notify_url:
+                  type: string
+                  example: "https://yourdomain.com/notify"
+                  description: Used to send notifications when the transaction is completed
+                order_info:
+                  type: string
+                  example: SDK team
+                  description: Detailed information about the order
+                extra_data:
+                  type: string
+                  example: eyJ1c2VybmFtZSI6ICJtb21vIn0
+                  description: Additional custom data
+              required:
+                - customer_name
+                - customer_phone
+                - amount
+                - currency
+                - notify_url
+                - return_url
+                - order_info
+                - extra_data
+      responses:
+        "200":
+          description: Payment URL created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  order_id:
+                    type: string
+                    example: MM1540456472575
+                  amount:
+                    type: integer
+                    example: 100000
+                  payment_url:
+                    type: string
+                    example: "https://paymentgateway.com/checkout?token=abc123"
+                  deeplink:
+                    tpye: string
+                    example: "myshoppingapp://product/detail?id=123"
+                  qr_codeUrl:
+                    type: string
+                    example: "https://www.example.com/"
+                required:
+                  - payment_url
+                  - status
+                  - order_id
+                  - amount
+                  - deeplink
+                  - qr_codeUrl
+        "400":
+          description: "Return this response if one of the following error occurs: 104"
+          content:
+            application/json:
+              examples:
+                error_104_example:
+                  value:
+                    error_code: 104
+                    message: Invalid syntax
+                    details:
+                      [
+                        "Missing required amount field",
+                        "Missing required customer_name field",
+                        "Missing required customer_phone field",
+                        "Missing required return_url field",
+                        "Missing required currency field",
+                        "Missing required notify_url field",
+                        "Missing required order_info field",
+                        "Missing required extra_data field",
+                      ]
+        "401":
+          description: "Return this response if one of the following error occurs: 116"
+          content:
+            application/json:
+              examples:
+                error_116_example:
+                  $ref: "#/components/examples/error_116_example"
+        "402":
+          description: "Return this response if one of the following error occurs: 201"
+          content:
+            application/json:
+              examples:
+                error_201_example:
+                  $ref: "#/components/examples/error_201_example"
+        "403":
+          description: "Return this response if one of the following error occurs: 220"
+          content:
+            application/json:
+              examples:
+                error_220_example:
+                  $ref: "#/components/examples/error_220_example"
+        "404":
+          description: "Return this response if one of the following error occurs: 210"
+          content:
+            application/json:
+              examples:
+                error_210_example:
+                  $ref: "#/components/examples/error_210_example"
+        "408":
+          description: "Return this response if one of the following error occurs: 203"
+          content:
+            application/json:
+              examples:
+                error_203_example:
+                  $ref: "#/components/examples/error_203_example"
+        "500":
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
+          content:
+            application/json:
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
+        "503":
+          description: "Return this response if one of the following error occurs: 202"
+          content:
+            application/json:
+              examples:
+                error_202_example:
+                  $ref: "#/components/examples/error_202_example"
+  /payment/orders/{order_id}/capture:
+    post:
+      tags:
+        - payment
+      operationId: capture_payment_status
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the order to check and update
+      responses:
+        "200":
+          description: Payment status captured and order status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order_id:
+                    type: string
+                    example: MM1540456472575
+                  amount:
+                    type: integer
+                    example: 100000
+                  payment_status:
+                    type: string
+                    example: paid # or unpaid, pending
+        "400":
+          description: "Return this response if one of the following error occurs: 104"
+          content:
+            application/json:
+              examples:
+                error_104_example:
+                  value:
+                    error_code: 104
+                    message: Invalid syntax
+                    details: ["Missing required order_id field"]
+        "404":
+          description: Order not found
+          content:
+            application/json:
+              examples:
+                error_211_example:
+                  $ref: "#/components/examples/error_211_example"
+        "500":
+          description: "Return this response if one of the following error occurs: 103, 117, 118, 119"
+          content:
+            application/json:
+              examples:
+                error_103_example:
+                  $ref: "#/components/examples/error_103_example"
 components:
   schemas:
     user_info:
@@ -572,3 +781,33 @@ components:
       value:
         error_code: 116
         message: Users must log in to access this resource
+    error_201_example:
+      value:
+        error_code: 201
+        message: Payment required but not completed successfully
+        details:
+          [
+            Invalid transaction amount,
+            Insufficient funds in the account,
+            User entered incorrect payment card information,
+          ]
+    error_202_example:
+      value:
+        error_code: 202
+        message: Cannot connect to the payment system
+    error_203_example:
+      value:
+        error_code: 203
+        message: The request timed out. Please try again later
+    error_220_example:
+      value:
+        error_code: 220
+        message: User's bank account has been locked
+    error_210_example:
+      value:
+        error_code: 210
+        message: Unable to determine the currency
+    error_211_example:
+      value:
+        error_code: 211
+        message: Order with ID not found
